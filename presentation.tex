@@ -1,17 +1,19 @@
 \documentclass[xcolor=dvipsnames]{beamer}
 
-\usepackage{graphicx}
 \usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{graphicx}
+\usepackage[svgpath=svg/,clean]{svg} %Has to be loaded after graphicx
 
 %Information
-\title[An Empirical Study]{Boundaries of Polyhedral Compilation}
+\title[Eine empirische Studie]{Boundaries of Polyhedral Compilation}
 \author{Stefan Huber}
 \institute{
-    Faculty of Computer Science and Mathematics\\
-    University of Passau
+    Fakultät für Informatik und Mathematik\\
+    Universität Passau
 }
 \date{\today}
-\subject{Computer Science}
+\subject{Informatik}
 
 %Configuration
 \usetheme{Rochester}
@@ -20,7 +22,7 @@
 
 \AtBeginSection[]{
     \begin{frame}
-        \frametitle{Table of Contents}
+        \frametitle{Inhaltsangabe}
         \tableofcontents[currentsection]
     \end{frame}
 }
@@ -29,16 +31,26 @@
 
 \frame{\titlepage}
 
-\section{Background}
+\section{Hintergrund}
 
 \begin{frame}
     Wow
 \end{frame}
 
-\section{Empirical Study}
+\section{Empirische Studie}
 
-\section{Analysis}
+\section{Analyse}
+\begin{frame}{\(DynCov_s\) und \(DynCov_p\)}
+    \begin{figure}[!h]
+        \includesvg[height=\textheight]{compDyncovScopParent}
+    \end{figure}
+\end{frame}
+\begin{frame}{Gründe für Ablehnung}
+    \begin{figure}[!h]
+        \includesvg[width=1.1\textwidth]{pieInvalidReasons}
+     \end{figure}
+\end{frame}
 
-\section{Discussion}
+\section{Diskussion}
 
 \end{document}

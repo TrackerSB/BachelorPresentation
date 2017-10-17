@@ -9,3 +9,6 @@
 *.snm
 *.toc
 *.synctex.gz
+
+#svginclude
+svg/*.pdf*
