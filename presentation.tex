@@ -4,6 +4,9 @@
 \usepackage[ngerman]{babel}
 \usepackage{graphicx}
 \usepackage[svgpath=svg/,clean]{svg} %Has to be loaded after graphicx
+\usepackage{tikz}
+\PassOptionsToPackage{fleqn}{amsmath}       % math environments and more by the AMS
+    \usepackage{amsmath}
 
 %Information
 \title[Eine empirische Studie]{Boundaries of Polyhedral Compilation}
@@ -27,6 +30,29 @@
     \end{frame}
 }
 
+%custom colors
+\definecolor{defaultColor}{HTML}{1E90FF}
+\definecolor{llvmIrColor}{HTML}{228B22}
+\definecolor{nonLlvmIrColor}{HTML}{B22222}
+
+%Tikz configuration
+\usetikzlibrary{arrows.meta, positioning, shapes, snakes, fit, calc}
+\tikzset{
+    node distance = 8mm and 15mm,
+    defaultNode/.style = {rectangle, rounded corners, draw=gray, drop shadow, very thick, bottom color=defaultColor!50!white, text centered, top color=white, minimum height=1.2em, minimum width=3em},
+    llvmIrNode/.style = {defaultNode, bottom color=llvmIrColor!50!white},
+    nonLlvmIrNode/.style = {defaultNode, bottom color=nonLlvmIrColor!50!white},
+    legendNode/.style = {rectangle},
+    defaultPath/.style = {-{Stealth[length=4mm]}, color=defaultColor, line width=0.2em, draw, rounded corners},
+    llvmIrPath/.style = {defaultPath, color=llvmIrColor},
+    nonLlvmIrPath/.style = {defaultPath, color=nonLlvmIrColor}
+}
+
+%Custom commands from the according thesis
+\newcommand{\opt}{LLVM Optimizer\xspace}
+\newcommand{\linker}{LLVM Linker\xspace}
+\newcommand{\generator}{LLVM Code Generator\xspace}
+
 \begin{document}
 
 \frame{\titlepage}
@@ -36,8 +62,61 @@
 \begin{frame}{History}
 \end{frame}
 \begin{frame}{Pipeline}
+    \begin{figure}[!ht]
+%        \caption[A possible pipeline of LLVM]{
+%            This visualizes a possible pipeline of \llvm.
+%            The reason for a \enquote{possible} pipeline is that the \linker is not necessary when only operating on a single \llvmir file.\tikzlegend
+%        }
+%        \label{fig:llvmPipeline}
+        \centering
+        \begin{tikzpicture}
+            \node(languages)[nonLlvmIrNode, align=center]{C/C++, Obj-C,\\Python, Ruby,...};
+            \node(frontend)[nonLlvmIrNode, right=of languages, align=center]{compiler\\frontend};
+            \node(opt1)[llvmIrNode, right=of frontend]{\opt};
+            \node(llvmLinker)[llvmIrNode, below=of opt1]{\linker};
+            \node(opt2)[llvmIrNode, below=of llvmLinker]{\opt};
+            \node(generator)[llvmIrNode, left=of opt2, align=center]{LLVM Code\\Generator};
+            \node(linker)[nonLlvmIrNode, left=of generator]{System Linker};
+            \path[nonLlvmIrPath] (languages) to (frontend);
+            \path[llvmIrPath] (frontend) to (opt1);
+            \path[llvmIrPath] (opt1) -| ($(opt1.north east) + (0.5, 0.5)$) -| node[auto, above=0.1cm, left=0.1cm]{Pass} (opt1);
+            \path[llvmIrPath] (opt2) |- ($(opt2.south east) + (0.5, -0.5)$) |- node[auto, above=0.1cm]{Pass} (opt2);
+            \path[llvmIrPath] (opt1) to node[auto, swap]{Multiple files} (llvmLinker);
+            \path[llvmIrPath] (llvmLinker) to node[auto, swap]{Single file} (opt2);
+            \path[llvmIrPath] (opt2) to (generator);
+            \path[nonLlvmIrPath] (generator) to (linker);
+        \end{tikzpicture}
+    \end{figure}
 \end{frame}
 \begin{frame}{Defintion Basic Block}
+\end{frame}
+\subsection{Polly}
+\begin{frame}{History}
+\end{frame}
+\begin{frame}{Pipeline}
+    \begin{figure}[H]
+%        \caption[The pipeline of Polly]{
+%            The pipeline of Polly \cite{PollyPresentation}.
+%            This figure shows the part of the pipeline of \llvm where Polly comes into effect.
+%            In this detail the communication between Polly and the \opt is visible.
+%            When Polly gets some peace of information it detects the \scops applies its own passes, generates \llvmir and transfers it back to the \opt.
+%            A complete pipeline of \llvm is shown in \autoref{fig:llvmPipeline}.\tikzlegend
+%        }
+        \centering
+        \begin{tikzpicture}
+            \coordinate(clang);
+            \node(opt)[llvmIrNode, right=of clang]{\ac{LLVM} Optimizer};
+            \node(polly)[llvmIrNode, below=of opt]{\ac{LLVM} Polly};
+            \coordinate[right=of opt](generator);
+            \path[llvmIrPath] (clang) to (opt);
+            \path[llvmIrPath, bend right] (opt.south west) to node[auto, swap]{SCoP Detection} (polly);
+            \path[llvmIrPath, bend right] (polly) to node[auto, swap]{Code Generation} (opt.south east);
+            \path[llvmIrPath] (opt) to (generator);
+            \path[llvmIrPath] (polly) edge[loop below] ();
+            \path[llvmIrPath] (opt) edge[loop above] node[auto]{Pass} ();
+        \end{tikzpicture}
+        \label{fig:pollyPipeline}
+    \end{figure}
 \end{frame}
 \begin{frame}{Definition Region}
 \end{frame}
