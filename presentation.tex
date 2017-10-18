@@ -1,12 +1,16 @@
-\documentclass[xcolor=dvipsnames]{beamer}
+\documentclass[aspectratio=169, xcolor=dvipsnames]{beamer}
 
+\usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
+\usepackage[backend=biber, style=alphabetic, citestyle=alphabetic-verb]{biblatex}
 \usepackage[ngerman]{babel}
 \usepackage{graphicx}
-\usepackage[svgpath=svg/,clean]{svg} %Has to be loaded after graphicx
+\usepackage[svgpath=svg/, clean]{svg} %Has to be loaded after graphicx
 \usepackage{tikz}
 \PassOptionsToPackage{fleqn}{amsmath}       % math environments and more by the AMS
-    \usepackage{amsmath}
+\usepackage{amsmath}
+\usepackage{xspace}
+\usepackage[babel, german=guillemets]{csquotes}
 
 %Information
 \title[Eine empirische Studie]{Boundaries of Polyhedral Compilation}
@@ -23,11 +27,24 @@
 \usecolortheme{whale}
 \beamertemplatenavigationsymbolsempty
 
+\setbeamertemplate{footline}{
+    \vspace{-20pt}\raisebox{5pt}{
+        \makebox[\paperwidth]{
+            \hfill\makebox[20pt]{\color{gray}{\scriptsize\insertframenumber}}
+        }
+    }
+}
+
+\setbeamertemplate{section page}{
+    \begin{centering}
+        \begin{beamercolorbox}[sep=12pt, center]{part title}
+            \usebeamerfont{section title}\insertsection\par
+        \end{beamercolorbox}
+    \end{centering}
+}
+
 \AtBeginSection[]{
-    \begin{frame}
-        \frametitle{Inhaltsangabe}
-        \tableofcontents[currentsection]
-    \end{frame}
+    \frame{\sectionpage}
 }
 
 %custom colors
@@ -36,7 +53,7 @@
 \definecolor{nonLlvmIrColor}{HTML}{B22222}
 
 %Tikz configuration
-\usetikzlibrary{arrows.meta, positioning, shapes, snakes, fit, calc}
+\usetikzlibrary{arrows.meta, positioning, shapes, snakes, fit, calc, shadows}
 \tikzset{
     node distance = 8mm and 15mm,
     defaultNode/.style = {rectangle, rounded corners, draw=gray, drop shadow, very thick, bottom color=defaultColor!50!white, text centered, top color=white, minimum height=1.2em, minimum width=3em},
@@ -48,18 +65,51 @@
     nonLlvmIrPath/.style = {defaultPath, color=nonLlvmIrColor}
 }
 
+\addbibresource{references.bib}
+
 %Custom commands from the according thesis
 \newcommand{\opt}{LLVM Optimizer\xspace}
 \newcommand{\linker}{LLVM Linker\xspace}
 \newcommand{\generator}{LLVM Code Generator\xspace}
+\newcommand{\noitem}{\item[{\color{white} blank}] {\color{white} blank}}
 
 \begin{document}
 
-\frame{\titlepage}
+\maketitle
+
+\frame{
+    \frametitle{Inhaltsangabe}
+    \tableofcontents
+}
 
 \section{Hintergrund}
 \subsection{LLVM}
-\begin{frame}{History}
+\begin{frame}{\subsecname}
+    \begin{itemize}
+        \item LLVM {\color{lightgray}(=Low Level Virtual Machine)}
+    \end{itemize}
+\end{frame}
+\begin{frame}[plain]
+    \begin{quotation}\noindent
+        \enquote{
+            Hi Jianzhou,
+
+            \enquote{LLVM} is officially no longer an acronym. The acronym it once expanded too was confusing, and inappropriate almost from day 1. :) As LLVM has grown to encompass other subprojects, it became even less useful and meaningless.
+
+            In short, it is just \enquote{The LLVM Project}, and LLVM doesn't stand for anything anymore. It is a nice short domain name though :)
+
+            -Chris
+        }\cite{TheNameOfLLVM}\\
+        \small{(Chris Lattner is the original author of LLVM\footnote{http://nondot.org/sabre/}.)}
+    \end{quotation}
+\end{frame}
+\begin{frame}{\subsecname}
+    \begin{itemize}
+        \item LLVM {\color{lightgray}(=Low Level Virtual Machine)}
+        \item Compiler Infrastruktur
+        \item Ursprünglich von Chris Lattner entwickelt
+        \item Seit 2014 Teil der LLVM Foundation
+    \end{itemize}
 \end{frame}
 \begin{frame}{Pipeline}
     \begin{figure}[!ht]
@@ -89,9 +139,29 @@
     \end{figure}
 \end{frame}
 \begin{frame}{Defintion Basic Block}
+    \begin{quotation}\noindent
+        \grqq The nodes of the flow graph are the basic blocks.
+        There is an edge from block \(B\) to block \(C\) if and only if it is possible for the first instruction in block \(C\) to immediately follow the last instruction in block \(B\).
+        There are two ways that such an edge could be justified:
+        \begin{itemize}
+            \item There is a conditional or unconditional jump from the end of \(B\) to the beginning of \(C\).
+            \item \(C\) immediately follows \(B\) in the original order of the three-address instructions, and \(B\) does not end in an unconditional jump.\grqq
+        \end{itemize}
+    \end{quotation}\cite[Kapitel 8.4.3, S.~529]{Drachenbuch}
+\end{frame}
+\begin{frame}{Definition CFG}
+    \begin{quotation}\noindent
+        \grqq The nodes of the flow graph are the basic blocks.
+        There is an edge from block \(B\) to block \(C\) if and only if it is possible for the first instruction in block \(C\) to immediately follow the last instruction in block \(B\).
+        There are two ways that such an edge could be justified:
+        \begin{itemize}
+            \item There is a conditional or unconditional jump from the end of \(B\) to the beginning of \(C\).
+            \item \(C\) immediately follows \(B\) in the original order of the three-address instructions, and \(B\) does not end in an unconditional jump.\grqq
+        \end{itemize}
+    \end{quotation}
 \end{frame}
 \subsection{Polly}
-\begin{frame}{History}
+\begin{frame}{\subsecname}
 \end{frame}
 \begin{frame}{Pipeline}
     \begin{figure}[H]
@@ -105,8 +175,8 @@
         \centering
         \begin{tikzpicture}
             \coordinate(clang);
-            \node(opt)[llvmIrNode, right=of clang]{\ac{LLVM} Optimizer};
-            \node(polly)[llvmIrNode, below=of opt]{\ac{LLVM} Polly};
+            \node(opt)[llvmIrNode, right=of clang]{LLVM Optimizer};
+            \node(polly)[llvmIrNode, below=of opt]{LLVM Polly};
             \coordinate[right=of opt](generator);
             \path[llvmIrPath] (clang) to (opt);
             \path[llvmIrPath, bend right] (opt.south west) to node[auto, swap]{SCoP Detection} (polly);
@@ -119,8 +189,10 @@
     \end{figure}
 \end{frame}
 \begin{frame}{Definition Region}
+    Bild zeigen
 \end{frame}
 \begin{frame}{Definition SCoP}
+    Bild zeigen
 \end{frame}
 \begin{frame}{SCoPDetection}
 \end{frame}
@@ -150,5 +222,20 @@
 \end{frame}
 
 \section{Diskussion}
+\begin{frame}{\secname}
+\end{frame}
+
+\begin{frame}[plain]
+    \begin{center}
+        \Huge{Welche Fragen beschäftigen Sie noch?}\\
+        \Large{Sie haben \em{jetzt} Gelgenheit.}
+    \end{center}
+\end{frame}
+
+\section{Quellen}
+\begin{frame}[allowframebreaks]{\secname}
+    \nocite{*}
+    \printbibliography
+\end{frame}
 
 \end{document}
