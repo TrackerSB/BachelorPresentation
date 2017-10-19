@@ -18,3 +18,7 @@
 
 #svginclude
 svg/*.pdf*
+
+#minted
+*.pygstyle
+*.pygtex

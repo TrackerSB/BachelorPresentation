@@ -1,6 +1,7 @@
 \documentclass[aspectratio=169, xcolor=dvipsnames]{beamer}
 
 \usepackage[T1]{fontenc}
+\usepackage{comment}
 \usepackage[utf8]{inputenc}
 \usepackage[backend=biber, style=alphabetic, citestyle=alphabetic-verb]{biblatex}
 \usepackage[ngerman]{babel}
@@ -11,6 +12,14 @@
 \usepackage{amsmath}
 \usepackage{xspace}
 \usepackage[babel, german=guillemets]{csquotes}
+\usepackage{minted}
+
+%minted configure
+\setminted{
+    linenos,
+    breaklines,
+    xleftmargin=1.8em
+}
 
 %Information
 \title[Eine empirische Studie]{Boundaries of Polyhedral Compilation}
@@ -87,6 +96,9 @@
 \begin{frame}{\subsecname}
     \begin{itemize}
         \item LLVM {\color{lightgray}(=Low Level Virtual Machine)}
+        \noitem
+        \noitem
+        \noitem
     \end{itemize}
 \end{frame}
 \begin{frame}[plain]
@@ -138,30 +150,55 @@
         \end{tikzpicture}
     \end{figure}
 \end{frame}
-\begin{frame}{Defintion Basic Block}
-    \begin{quotation}\noindent
-        \grqq The nodes of the flow graph are the basic blocks.
-        There is an edge from block \(B\) to block \(C\) if and only if it is possible for the first instruction in block \(C\) to immediately follow the last instruction in block \(B\).
-        There are two ways that such an edge could be justified:
-        \begin{itemize}
-            \item There is a conditional or unconditional jump from the end of \(B\) to the beginning of \(C\).
-            \item \(C\) immediately follows \(B\) in the original order of the three-address instructions, and \(B\) does not end in an unconditional jump.\grqq
-        \end{itemize}
-    \end{quotation}\cite[Kapitel 8.4.3, S.~529]{Drachenbuch}
+\begin{comment}
+    \begin{frame}{Defintion Basic Block}
+        \begin{quotation}\noindent
+            \grqq The nodes of the flow graph are the basic blocks.
+            There is an edge from block \(B\) to block \(C\) if and only if it is possible for the first instruction in block \(C\) to immediately follow the last instruction in block \(B\).
+            There are two ways that such an edge could be justified:
+            \begin{itemize}
+                \item There is a conditional or unconditional jump from the end of \(B\) to the beginning of \(C\).
+                \item \(C\) immediately follows \(B\) in the original order of the three-address instructions, and \(B\) does not end in an unconditional jump.\grqq
+            \end{itemize}
+        \end{quotation}\cite[Kapitel 8.4.3, S.~529]{Drachenbuch}
+    \end{frame}
+    \begin{frame}{Definition CFG}
+        \begin{quotation}\noindent
+            \grqq The nodes of the flow graph are the basic blocks.
+            There is an edge from block \(B\) to block \(C\) if and only if it is possible for the first instruction in block \(C\) to immediately follow the last instruction in block \(B\).
+            There are two ways that such an edge could be justified:
+            \begin{itemize}
+                \item There is a conditional or unconditional jump from the end of \(B\) to the beginning of \(C\).
+                \item \(C\) immediately follows \(B\) in the original order of the three-address instructions, and \(B\) does not end in an unconditional jump.\grqq
+            \end{itemize}
+        \end{quotation}
+    \end{frame}
+\end{comment}
+\begin{frame}[plain]
+    \resizebox{9.8cm}{!}{
+        \begin{minipage}{\textwidth}
+            \begin{columns}
+                \begin{column}{10cm}
+                            \inputminted{c++}{cpp/matmul.cpp}
+                \end{column}
+                \begin{column}{1cm}
+                    \Huge{Matmul.cpp}
+                \end{column}
+            \end{columns}
+        \end{minipage}
+    }
 \end{frame}
-\begin{frame}{Definition CFG}
-    \begin{quotation}\noindent
-        \grqq The nodes of the flow graph are the basic blocks.
-        There is an edge from block \(B\) to block \(C\) if and only if it is possible for the first instruction in block \(C\) to immediately follow the last instruction in block \(B\).
-        There are two ways that such an edge could be justified:
-        \begin{itemize}
-            \item There is a conditional or unconditional jump from the end of \(B\) to the beginning of \(C\).
-            \item \(C\) immediately follows \(B\) in the original order of the three-address instructions, and \(B\) does not end in an unconditional jump.\grqq
-        \end{itemize}
-    \end{quotation}
+\begin{frame}{CFG von Matmul.cpp}
+    Zeige Bild
 \end{frame}
 \subsection{Polly}
 \begin{frame}{\subsecname}
+    \begin{itemize}
+        \item Plugin für LLVM
+        \item Schleifenoptimierungen auf Basis des Polyeder Modells
+        \item Früherer Versuch: Graphite (GCC)
+        \item Zukünftig in LLVM integriert
+    \end{itemize}
 \end{frame}
 \begin{frame}{Pipeline}
     \begin{figure}[H]
@@ -188,26 +225,35 @@
         \label{fig:pollyPipeline}
     \end{figure}
 \end{frame}
-\begin{frame}{Definition Region}
-    Bild zeigen
+\begin{frame}{Regiontree von Matmul.cpp}
+    Zeige Bild
 \end{frame}
-\begin{frame}{Definition SCoP}
-    Bild zeigen
+\begin{frame}{SCoPtree von Matmul.cpp}
+    Zeige Bild
 \end{frame}
 \begin{frame}{SCoPDetection}
 \end{frame}
 
 \section{Empirische Studie}
 \subsection{Goals}
+\begin{frame}{\subsecname}
+    \begin{itemize}
+        \item Überdeckung der SCoPs
+        \item Gründe für Ablehnung größerer Bereiche
+        \item Theoretischer Speedup
+    \end{itemize}
+\end{frame}
 \subsection{Measurement Methology}
 \begin{frame}{Definition Überdeckung}
+    \Huge{\[DynCov := \frac{T_i}{T}\]}
 \end{frame}
 \begin{frame}{Amdahl's Law}
+    \Huge{\[S := \frac{N}{(1-DynCov)*N+DynCov}\]}
 \end{frame}
 \begin{frame}{Rejection Reasons}
+    Ich kann doch hier nicht alle 20 (ca.) Gründe erläutern...
 \end{frame}
 \subsection{Tasks}
-\subsection{Experiment Setting}
 
 \section{Analyse}
 \begin{frame}{\(DynCov_s\) und \(DynCov_p\)}
@@ -217,7 +263,7 @@
 \end{frame}
 \begin{frame}{Gründe für Ablehnung}
     \begin{figure}[!h]
-        \includesvg[width=1.1\textwidth]{pieInvalidReasons}
+        \includesvg[height=\textheight]{pieInvalidReasons}
      \end{figure}
 \end{frame}
 
