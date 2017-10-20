@@ -81,6 +81,7 @@
 \newcommand{\linker}{LLVM Linker\xspace}
 \newcommand{\generator}{LLVM Code Generator\xspace}
 \newcommand{\noitem}{\item[{\color{white} blank}] {\color{white} blank}}
+\newcommand{\draftnote}[1]{{\color{red} \textbf{#1}}}
 
 \begin{document}
 
@@ -189,7 +190,7 @@
     }
 \end{frame}
 \begin{frame}{CFG von Matmul.cpp}
-    Zeige Bild
+    \draftnote{Zeige Bild}
 \end{frame}
 \subsection{Polly}
 \begin{frame}{\subsecname}
@@ -226,39 +227,42 @@
     \end{figure}
 \end{frame}
 \begin{frame}{Regiontree von Matmul.cpp}
-    Zeige Bild
+    \draftnote{Zeige Bild}
 \end{frame}
 \begin{frame}{SCoPtree von Matmul.cpp}
-    Zeige Bild
+    \draftnote{Zeige Bild}
 \end{frame}
 \begin{frame}{SCoPDetection}
+    \draftnote{Überlegen, ob hierfür Zeit ist}
 \end{frame}
 
 \section{Empirische Studie}
-\subsection{Ziele}
+\subsection{Experiment Settings}
 \begin{frame}{\subsecname}
     \begin{itemize}
-        \item Überdeckung der SCoPs
-        \item Gründe für Ablehnung größerer Bereiche
-        \item Theoretischer Speedup
+        \item Instrumentierung mittels Performance Application Programming Interface (PAPI)
+        \item Neuer Pass für Polly (FunctionPass)
+        \noitem
+        \noitem
     \end{itemize}
 \end{frame}
-\subsection{Measurement Methology}
-\begin{frame}{Definition Überdeckung}
+\begin{frame}{Beispiel Instrumentierung}
+    \draftnote{Füge Bild ein}
+\end{frame}
+\begin{frame}{\subsecname}
+    \begin{itemize}
+        \item Instrumentierung mittels Performance Application Programming Interface (PAPI)
+        \item Neuer Pass für Polly (FunctionPass)
+        \item Neues Experiment für benchbuild zur Auslösung des Passes
+        \item Auch \enquote{unprofitable} Regions berücksichtigt
+    \end{itemize}
+\end{frame}
+\subsection{Überdeckung der SCoPs}
+\begin{frame}{\subsecname}
+    Sei \(T_i\in\mathbb{N}\) die Ausführungszeit der SCoPs eines Projektes und \(T\in\mathbb{N}\) die Ausführungszeit des gesammten Projektes. Dann gilt für die Überdeckung \(DynCov\in\mathbb{Q}\):
     \Huge{\[DynCov := \frac{T_i}{T}\]}
 \end{frame}
-\begin{frame}{Amdahl's Law}
-    \Huge{\[S := \frac{N}{(1-DynCov)*N+DynCov}\]}
-\end{frame}
-\begin{frame}{Rejection Reasons}
-    Ich kann doch hier nicht alle 20 (ca.) Gründe erläutern...
-\end{frame}
-\subsection{Aufgaben}
-\begin{frame}{\subsecname}
-\end{frame}
-
-\section{Analyse}
-\begin{frame}{\(DynCov_s\) und \(DynCov_p\)}
+\begin{frame}{\subsecname: \(DynCov_s\) und \(DynCov_p\)}
     \vspace{-1cm}
     \begin{columns}
         \begin{column}{5cm}
@@ -275,13 +279,17 @@
         \end{column}
     \end{columns}
 \end{frame}
-\begin{frame}{Gründe für Ablehnung}
+\subsection{Gründe für Ablehnung größerer Regions}
+\begin{frame}{\subsecname}
+    Ich kann doch hier nicht alle 20 (ca.) Gründe erläutern...
+\end{frame}
+\begin{frame}{\subsecname}
     \vspace{-0.2cm}
     \begin{figure}[!h]
         \includesvg[height=\textheight]{pieInvalidReasons}
      \end{figure}
 \end{frame}
-\begin{frame}{Analyse der Ablehnungsgründe}
+\begin{frame}{Analyse bzgl. \subsecname}
     \begin{description}
         \item[toplevel regions]Sind bereits \enquote{maximal}, wenn nicht in größerem Kontext betrachtet
         \item[Could not compute]Sind z.T. abhängig von Parametern, d.h. Auflösung schwierig
@@ -291,6 +299,19 @@
         \item[Polly returned no reason]Schwierig irgendwelche Aussagen zu treffen
     \end{description}
     \(\Rightarrow\) \textbf{Bereits 87\% überdeckt}
+\end{frame}
+\subsection{Theoretischer Speedup}
+\begin{frame}{\subsecname: Amdahl's Law}
+    Sei \(N\in\mathbb{N}\) die Anzahl der Prozessoren und \(DynCov\in\mathbb{Q}\) die Überdeckung der SCoPs eines Projektes. Dann gilt für den theoretischen Speedup \(S\in\mathbb{Q}\):
+    \Huge{\[S := \frac{N}{(1-DynCov)*N+DynCov}\]}
+\end{frame}
+\begin{frame}{\subsecname: Auswertung}
+    Sei \(N=8\).
+    \begin{itemize}
+        \item Theoretischer Speedup SCoPs: 1.55
+        \item Theoretischer Speedup MaxRegions: 1.61
+        \item \(\Rightarrow\) \textbf{Nicht signifikant höher}
+    \end{itemize}
 \end{frame}
 
 \begin{frame}[plain]
