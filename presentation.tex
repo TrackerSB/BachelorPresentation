@@ -179,7 +179,7 @@
         \begin{minipage}{\textwidth}
             \begin{columns}
                 \begin{column}{10cm}
-                            \inputminted{c++}{cpp/matmul.cpp}
+                    \inputminted{c++}{cpp/matmul.cpp}
                 \end{column}
                 \begin{column}{1cm}
                     \Huge{Matmul.cpp}
@@ -235,7 +235,7 @@
 \end{frame}
 
 \section{Empirische Studie}
-\subsection{Goals}
+\subsection{Ziele}
 \begin{frame}{\subsecname}
     \begin{itemize}
         \item Überdeckung der SCoPs
@@ -253,22 +253,44 @@
 \begin{frame}{Rejection Reasons}
     Ich kann doch hier nicht alle 20 (ca.) Gründe erläutern...
 \end{frame}
-\subsection{Tasks}
+\subsection{Aufgaben}
+\begin{frame}{\subsecname}
+\end{frame}
 
 \section{Analyse}
 \begin{frame}{\(DynCov_s\) und \(DynCov_p\)}
-    \begin{figure}[!h]
-        \includesvg[height=\textheight]{compDyncovScopParent}
-    \end{figure}
+    \vspace{-1cm}
+    \begin{columns}
+        \begin{column}{5cm}
+            \begin{figure}[!h]
+                \includesvg[height=\textheight]{compDyncovScopParent}
+            \end{figure}
+        \end{column}
+        \begin{column}{5cm}
+            \begin{itemize}
+                \item Unteren 25\% bleiben gleich
+                \item Sonst leichter Anstieg der Überdeckung
+                \item ABER: \textbf{Nicht signifikant}
+            \end{itemize}
+        \end{column}
+    \end{columns}
 \end{frame}
 \begin{frame}{Gründe für Ablehnung}
+    \vspace{-0.2cm}
     \begin{figure}[!h]
         \includesvg[height=\textheight]{pieInvalidReasons}
      \end{figure}
 \end{frame}
-
-\section{Diskussion}
-\begin{frame}{\secname}
+\begin{frame}{Analyse der Ablehnungsgründe}
+    \begin{description}
+        \item[toplevel regions]Sind bereits \enquote{maximal}, wenn nicht in größerem Kontext betrachtet
+        \item[Could not compute]Sind z.T. abhängig von Parametern, d.h. Auflösung schwierig
+        \item[Call instruction]Vermutlich auch zukünftig keine Garantien von Seiteneffektfreiheit
+        \item[Non affine loop bound]Oft nicht-Affinität zwingend\\
+            Ansätze für nicht-Affinität vorhanden, aber noch nicht vielversprechend
+        \item[Polly returned no reason]Schwierig irgendwelche Aussagen zu treffen
+    \end{description}
+    \(\Rightarrow\) \textbf{Bereits 87\% überdeckt}
 \end{frame}
 
 \begin{frame}[plain]
