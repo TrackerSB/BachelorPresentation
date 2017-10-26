@@ -118,19 +118,20 @@
 \end{frame}
 \begin{frame}{\subsecname}
     \begin{itemize}
-        \item LLVM {\color{lightgray}(=Low Level Virtual Machine)}
-        \item Compiler Infrastruktur
-        \item Ursprünglich von Chris Lattner entwickelt
-        \item Seit 2014 Teil der LLVM Foundation
+        \item LLVM {\color{lightgray}(Low Level Virtual Machine)}
+        \item Compiler Infrastruktur\pause
+        \item Ursprünglich von Chris Lattner entwickelt\pause
+        \item Seit 2014 Teil der LLVM Foundation\pause
+        \item LLVM-IR
+            \begin{itemize}[<+->]
+                \item Abstraktion von der Input-Programmiersprache
+                \item Three-address instructions
+                \item SSA (Static Single-Assignment)
+            \end{itemize}
     \end{itemize}
 \end{frame}
 \begin{frame}{Pipeline}
     \begin{figure}[!ht]
-%        \caption[A possible pipeline of LLVM]{
-%            This visualizes a possible pipeline of \llvm.
-%            The reason for a \enquote{possible} pipeline is that the \linker is not necessary when only operating on a single \llvmir file.\tikzlegend
-%        }
-%        \label{fig:llvmPipeline}
         \centering
         \begin{tikzpicture}
             \node(languages)[nonLlvmIrNode, align=center]{C/C++, Obj-C,\\Python, Ruby,...};
@@ -150,6 +151,8 @@
             \path[nonLlvmIrPath] (generator) to (linker);
         \end{tikzpicture}
     \end{figure}
+    \centering
+    \tiny{Grüne Pfeile/Knoten verwenden/basieren auf LLVM-IR}
 \end{frame}
 \begin{comment}
     \begin{frame}{Defintion Basic Block}
@@ -194,7 +197,7 @@
 \end{frame}
 \subsection{Polly}
 \begin{frame}{\subsecname}
-    \begin{itemize}
+    \begin{itemize}[<+(1)->]
         \item Plugin für LLVM
         \item Schleifenoptimierungen auf Basis des Polyeder Modells
         \item Früherer Versuch: Graphite (GCC)
@@ -227,34 +230,35 @@
     \end{figure}
 \end{frame}
 \begin{frame}{Regiontree von Matmul.cpp}
-    \draftnote{Zeige Bild}
+    \href{run:./gfx/matmulRegions.png}{Regiontree von Matmul.cpp}
 \end{frame}
 \begin{frame}{SCoPtree von Matmul.cpp}
-    \draftnote{Zeige Bild}
+    \href{run:./gfx/matmulScops.png}{SCoPtree von Matmul.cpp}
 \end{frame}
 \begin{frame}{SCoPDetection}
-    \draftnote{Überlegen, ob hierfür Zeit ist}
+    \draftnote{Austesten, ob hierfür Zeit ist}
 \end{frame}
 
 \section{Empirische Studie}
 \subsection{Experiment Settings}
 \begin{frame}{\subsecname}
-    \begin{itemize}
-        \item Instrumentierung mittels Performance Application Programming Interface (PAPI)
-        \item Neuer Pass für Polly (FunctionPass)
+    \begin{itemize}\pause
+        \item Instrumentierung mittels Performance Application Programming Interface (PAPI)\pause
+        \item Neuer Pass für Polly (FunctionPass)\pause
         \noitem
         \noitem
     \end{itemize}
 \end{frame}
 \begin{frame}{Beispiel Instrumentierung}
-    \draftnote{Füge Bild ein}
+    \centering
+    \includegraphics[height=\textheight]{gfx/matmulScopsAfterInstrumentation.png}
 \end{frame}
 \begin{frame}{\subsecname}
     \begin{itemize}
         \item Instrumentierung mittels Performance Application Programming Interface (PAPI)
         \item Neuer Pass für Polly (FunctionPass)
-        \item Neues Experiment für benchbuild zur Auslösung des Passes
-        \item Auch \enquote{unprofitable} Regions berücksichtigt
+        \item Neues Experiment für benchbuild zur Auslösung des Passes\pause
+        \item Auch \enquote{unprofitable} Regions berücksichtigt\pause
     \end{itemize}
 \end{frame}
 \subsection{Überdeckung der SCoPs}
@@ -271,7 +275,7 @@
             \end{figure}
         \end{column}
         \begin{column}{5cm}
-            \begin{itemize}
+            \begin{itemize}[<+(1)->]
                 \item Unteren 25\% bleiben gleich
                 \item Sonst leichter Anstieg der Überdeckung
                 \item ABER: \textbf{Nicht signifikant}
@@ -281,7 +285,7 @@
 \end{frame}
 \subsection{Gründe für Ablehnung größerer Regions}
 \begin{frame}{\subsecname}
-    Ich kann doch hier nicht alle 20 (ca.) Gründe erläutern...
+    \draftnote{Ich kann doch hier nicht alle 20 (ca.) Gründe erläutern...}
 \end{frame}
 \begin{frame}{\subsecname}
     \vspace{-0.2cm}
@@ -290,14 +294,14 @@
      \end{figure}
 \end{frame}
 \begin{frame}{Analyse bzgl. \subsecname}
-    \begin{description}
+    \begin{description}[<+(1)->]
         \item[toplevel regions]Sind bereits \enquote{maximal}, wenn nicht in größerem Kontext betrachtet
         \item[Could not compute]Sind z.T. abhängig von Parametern, d.h. Auflösung schwierig
         \item[Call instruction]Vermutlich auch zukünftig keine Garantien von Seiteneffektfreiheit
         \item[Non affine loop bound]Oft nicht-Affinität zwingend\\
             Ansätze für nicht-Affinität vorhanden, aber noch nicht vielversprechend
         \item[Polly returned no reason]Schwierig irgendwelche Aussagen zu treffen
-    \end{description}
+    \end{description}\pause
     \(\Rightarrow\) \textbf{Bereits 87\% überdeckt}
 \end{frame}
 \subsection{Theoretischer Speedup}
@@ -307,11 +311,11 @@
 \end{frame}
 \begin{frame}{\subsecname: Auswertung}
     Sei \(N=8\).
-    \begin{itemize}
+    \begin{itemize}[<+(1)->]
         \item Theoretischer Speedup SCoPs: 1.55
         \item Theoretischer Speedup MaxRegions: 1.61
-        \item \(\Rightarrow\) \textbf{Nicht signifikant höher}
-    \end{itemize}
+    \end{itemize}\pause
+    \(\Rightarrow\) \textbf{Nicht signifikant höher}
 \end{frame}
 
 \begin{frame}[plain]
