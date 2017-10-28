@@ -1,0 +1,22 @@
+LLVM:
+Compiler Infrastruktur
+Ursprünglich von Chris Lattner entwickelt
+Seit 2014 Teil der LLVM Foundation
+
+Chris Lattner bei:
+LLVM, clang, Apple, Tesla Autopilot (kurz), jetzt Google Brain
+
+LLVM-IR:
+Innerhalb pipeline
+SSA
+Three-address-instructions
+Abstraktion von ursprünglicher Programmiersprache
+
+Polly:
+Plugin für LLVM
+Schleifenoptimierungen auf Basis des Polyeder Modells
+Früherer Versuch: Graphite (GCC)
+Zukünftig in LLVM integriert
+
+SCoPDetection:
+Ablehnungsgründe über Polly abfragen

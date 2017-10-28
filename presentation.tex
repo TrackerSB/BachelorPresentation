@@ -92,16 +92,20 @@
     \tableofcontents
 }
 
-\section{Hintergrund}
-\subsection{LLVM}
-\begin{frame}{\subsecname}
+\section{Zielsetzung}
+\begin{frame}{\secname}
     \begin{itemize}
-        \item LLVM {\color{lightgray}(=Low Level Virtual Machine)}
-        \noitem
-        \noitem
-        \noitem
+        \item Wie hoch ist die Überdeckung der Teile, die im Polyeder-Modell optimiert werden können?
+        \item Warum wurden größere Regionen abgelehnt?
+        \item Wie hoch ist der theoretische Speedup bei Beseitigung dieser Probleme?
     \end{itemize}
 \end{frame}
+\begin{frame}{Gründe nennen}
+    \draftnote{Bevor ich Gründe nennen könnte, müsste ich ja zuerst sagen, was ich rausbekommen habe, damit ich nicht alle möglichen nennen muss?}
+\end{frame}
+
+\section{Hintergrund}
+\subsection{LLVM}
 \begin{frame}[plain]
     \begin{quotation}\noindent
         \enquote{
@@ -116,19 +120,19 @@
         \small{(Chris Lattner is the original author of LLVM\footnote{http://nondot.org/sabre/}.)}
     \end{quotation}
 \end{frame}
-\begin{frame}{\subsecname}
-    \begin{itemize}
-        \item LLVM {\color{lightgray}(Low Level Virtual Machine)}
-        \item Compiler Infrastruktur\pause
-        \item Ursprünglich von Chris Lattner entwickelt\pause
-        \item Seit 2014 Teil der LLVM Foundation\pause
-        \item LLVM-IR
-            \begin{itemize}[<+->]
-                \item Abstraktion von der Input-Programmiersprache
-                \item Three-address instructions
-                \item SSA (Static Single-Assignment)
-            \end{itemize}
-    \end{itemize}
+\begin{frame}[plain]
+    \resizebox{9.8cm}{!}{
+        \begin{minipage}{\textwidth}
+            \begin{columns}
+                \begin{column}{10cm}
+                    \inputminted{c++}{cpp/matmul.cpp}
+                \end{column}
+                \begin{column}{1cm}
+                    \Huge{Matmul.cpp}
+                \end{column}
+            \end{columns}
+        \end{minipage}
+    }
 \end{frame}
 \begin{frame}{Pipeline}
     \begin{figure}[!ht]
@@ -154,65 +158,15 @@
     \centering
     \tiny{Grüne Pfeile/Knoten verwenden/basieren auf LLVM-IR}
 \end{frame}
-\begin{comment}
-    \begin{frame}{Defintion Basic Block}
-        \begin{quotation}\noindent
-            \grqq The nodes of the flow graph are the basic blocks.
-            There is an edge from block \(B\) to block \(C\) if and only if it is possible for the first instruction in block \(C\) to immediately follow the last instruction in block \(B\).
-            There are two ways that such an edge could be justified:
-            \begin{itemize}
-                \item There is a conditional or unconditional jump from the end of \(B\) to the beginning of \(C\).
-                \item \(C\) immediately follows \(B\) in the original order of the three-address instructions, and \(B\) does not end in an unconditional jump.\grqq
-            \end{itemize}
-        \end{quotation}\cite[Kapitel 8.4.3, S.~529]{Drachenbuch}
-    \end{frame}
-    \begin{frame}{Definition CFG}
-        \begin{quotation}\noindent
-            \grqq The nodes of the flow graph are the basic blocks.
-            There is an edge from block \(B\) to block \(C\) if and only if it is possible for the first instruction in block \(C\) to immediately follow the last instruction in block \(B\).
-            There are two ways that such an edge could be justified:
-            \begin{itemize}
-                \item There is a conditional or unconditional jump from the end of \(B\) to the beginning of \(C\).
-                \item \(C\) immediately follows \(B\) in the original order of the three-address instructions, and \(B\) does not end in an unconditional jump.\grqq
-            \end{itemize}
-        \end{quotation}
-    \end{frame}
-\end{comment}
-\begin{frame}[plain]
-    \resizebox{9.8cm}{!}{
-        \begin{minipage}{\textwidth}
-            \begin{columns}
-                \begin{column}{10cm}
-                    \inputminted{c++}{cpp/matmul.cpp}
-                \end{column}
-                \begin{column}{1cm}
-                    \Huge{Matmul.cpp}
-                \end{column}
-            \end{columns}
-        \end{minipage}
-    }
-\end{frame}
 \begin{frame}{CFG von Matmul.cpp}
-    \draftnote{Zeige Bild}
+    \href{run:./gfx/matmulCfg.png}{CFG von Matmul.cpp}
+\end{frame}
+\begin{frame}{Regiontree von Matmul.cpp}
+    \href{run:./gfx/matmulRegions.png}{Regiontree von Matmul.cpp}
 \end{frame}
 \subsection{Polly}
-\begin{frame}{\subsecname}
-    \begin{itemize}[<+(1)->]
-        \item Plugin für LLVM
-        \item Schleifenoptimierungen auf Basis des Polyeder Modells
-        \item Früherer Versuch: Graphite (GCC)
-        \item Zukünftig in LLVM integriert
-    \end{itemize}
-\end{frame}
-\begin{frame}{Pipeline}
+\begin{frame}{Pipeline von Polly}
     \begin{figure}[H]
-%        \caption[The pipeline of Polly]{
-%            The pipeline of Polly \cite{PollyPresentation}.
-%            This figure shows the part of the pipeline of \llvm where Polly comes into effect.
-%            In this detail the communication between Polly and the \opt is visible.
-%            When Polly gets some peace of information it detects the \scops applies its own passes, generates \llvmir and transfers it back to the \opt.
-%            A complete pipeline of \llvm is shown in \autoref{fig:llvmPipeline}.\tikzlegend
-%        }
         \centering
         \begin{tikzpicture}
             \coordinate(clang);
@@ -228,9 +182,6 @@
         \end{tikzpicture}
         \label{fig:pollyPipeline}
     \end{figure}
-\end{frame}
-\begin{frame}{Regiontree von Matmul.cpp}
-    \href{run:./gfx/matmulRegions.png}{Regiontree von Matmul.cpp}
 \end{frame}
 \begin{frame}{SCoPtree von Matmul.cpp}
     \href{run:./gfx/matmulScops.png}{SCoPtree von Matmul.cpp}
