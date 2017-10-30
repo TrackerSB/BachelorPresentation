@@ -13,6 +13,8 @@
 \usepackage{xspace}
 \usepackage[babel, german=guillemets]{csquotes}
 \usepackage{minted}
+\usepackage{pstricks}
+\usepackage{transparent}
 
 %minted configure
 \setminted{
@@ -231,15 +233,28 @@
     \end{figure}
 \end{frame}
 \begin{frame}{Analyse bzgl. \subsecname}
-    \begin{description}[<+(1)->]
-        \item[{\color[HTML]{b05900} toplevel regions}]Sind bereits \enquote{maximal}, wenn nicht in größerem Kontext betrachtet
-        \item[{\color[HTML]{ffba75} Could not compute}]Sind z.T. abhängig von Parametern, d.h. Auflösung schwierig
-        \item[{\color[HTML]{ff9933} Call instruction}]Vermutlich auch zukünftig keine Garantien von Seiteneffektfreiheit
-        \item[{\color[HTML]{0087b0} Non affine loop bound}]Oft nicht-Affinität zwingend\\
-            Ansätze für nicht-Affinität vorhanden, aber noch nicht vielversprechend
-        \item[{\color[HTML]{8ae3ff} Polly returned no reason}]Schwierig irgendwelche Aussagen zu treffen
-    \end{description}\pause
-    \(\Rightarrow\) \textbf{Bereits 87\% überdeckt}
+    \centering
+    \pspicture(0, .18\textheight)
+        \rput(.5\textwidth,.5\textheight){
+            \includesvg[height=\textheight]{pieInvalidReasons}
+        }
+        \rput(0, 0){
+            \transparent{.8}\textcolor{white}{\rule{\paperwidth}{.82\paperheight}}
+        }
+        \rput(0, 0){
+            \begin{minipage}{\textwidth}
+                \begin{description}[<+->]
+                    \item[{\color[HTML]{b05900} toplevel regions}]Sind bereits \enquote{maximal}, wenn nicht in größerem Kontext betrachtet
+                    \item[{\color[HTML]{ffba75} Could not compute}]Sind z.T. abhängig von Parametern, d.h. Auflösung schwierig
+                    \item[{\color[HTML]{ff9933} Call instruction}]Vermutlich auch zukünftig keine Garantien von Seiteneffektfreiheit
+                    \item[{\color[HTML]{0087b0} Non affine loop bound}]Oft nicht-Affinität zwingend\\
+                        Ansätze für nicht-Affinität vorhanden, aber noch nicht vielversprechend
+                    \item[{\color[HTML]{8ae3ff} Polly returned no reason}]Schwierig irgendwelche Aussagen zu treffen
+                \end{description}\pause
+                \(\Rightarrow\) \textbf{Bereits 87\% überdeckt}
+            \end{minipage}
+        }
+    \endpspicture
 \end{frame}
 \subsection{Theoretischer Speedup}
 \begin{frame}{\subsecname: Auswertung}
