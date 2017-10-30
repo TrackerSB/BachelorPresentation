@@ -12,6 +12,9 @@ SSA
 Three-address-instructions
 Abstraktion von ursprünglicher Programmiersprache
 
+SCoPtree:
+Ablehnungsgründe annotiert
+
 Polly:
 Plugin für LLVM
 Schleifenoptimierungen auf Basis des Polyeder Modells
@@ -20,3 +23,6 @@ Zukünftig in LLVM integriert
 
 SCoPDetection:
 Ablehnungsgründe über Polly abfragen
+
+DynCov:
+SCoPs + MaxParents
