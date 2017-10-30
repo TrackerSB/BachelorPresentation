@@ -191,32 +191,21 @@
 \end{frame}
 
 \section{Empirische Studie}
-\subsection{Experiment Settings}
-\begin{frame}{\subsecname}
-    \begin{itemize}\pause
-        \item Instrumentierung mittels Performance Application Programming Interface (PAPI)\pause
-        \item Neuer Pass für Polly (FunctionPass)\pause
-        \noitem
-        \noitem
-    \end{itemize}
-\end{frame}
-\begin{frame}{Beispiel Instrumentierung}
-    \centering
-    \includegraphics[height=\textheight]{gfx/matmulScopsAfterInstrumentation.png}
-\end{frame}
-\begin{frame}{\subsecname}
-    \begin{itemize}
-        \item Instrumentierung mittels Performance Application Programming Interface (PAPI)
-        \item Neuer Pass für Polly (FunctionPass)
-        \item Neues Experiment für benchbuild zur Auslösung des Passes\pause
-        \item Auch \enquote{unprofitable} Regions berücksichtigt\pause
-    \end{itemize}
-\end{frame}
-\subsection{Überdeckung der SCoPs}
-\begin{frame}{\subsecname}
+\subsection{Experiment Variablen}
+\begin{frame}{\subsecname: DynCov}
     Sei \(T_i\in\mathbb{N}\) die Ausführungszeit der SCoPs eines Projektes und \(T\in\mathbb{N}\) die Ausführungszeit des gesammten Projektes. Dann gilt für die Überdeckung \(DynCov\in\mathbb{Q}\):
     \Huge{\[DynCov := \frac{T_i}{T}\]}
 \end{frame}
+\begin{frame}{\subsecname: Amdahl's Law}
+    Sei \(N\in\mathbb{N}\) die Anzahl der Prozessoren und \(DynCov\in\mathbb{Q}\) die Überdeckung der SCoPs eines Projektes. Dann gilt für den theoretischen Speedup \(S\in\mathbb{Q}\):
+    \Huge{\[S := \frac{N}{(1-DynCov)*N+DynCov}\]}
+\end{frame}
+\subsection{Beispiel Instrumentierung}
+\begin{frame}{\subsecname}
+    \centering
+    \includegraphics[height=\textheight]{gfx/matmulScopsAfterInstrumentation.png}
+\end{frame}
+\subsection{Überdeckung der SCoPs}
 \begin{frame}{\subsecname: \(DynCov_s\) und \(DynCov_p\)}
     \vspace{-1cm}
     \begin{columns}
@@ -236,9 +225,6 @@
 \end{frame}
 \subsection{Gründe für Ablehnung größerer Regions}
 \begin{frame}{\subsecname}
-    \draftnote{Ich kann doch hier nicht alle 20 (ca.) Gründe erläutern...}
-\end{frame}
-\begin{frame}{\subsecname}
     \vspace{-0.2cm}
     \begin{figure}[!h]
         \includesvg[height=\textheight]{pieInvalidReasons}
@@ -246,20 +232,16 @@
 \end{frame}
 \begin{frame}{Analyse bzgl. \subsecname}
     \begin{description}[<+(1)->]
-        \item[toplevel regions]Sind bereits \enquote{maximal}, wenn nicht in größerem Kontext betrachtet
-        \item[Could not compute]Sind z.T. abhängig von Parametern, d.h. Auflösung schwierig
-        \item[Call instruction]Vermutlich auch zukünftig keine Garantien von Seiteneffektfreiheit
-        \item[Non affine loop bound]Oft nicht-Affinität zwingend\\
+        \item[{\color[HTML]{b05900} toplevel regions}]Sind bereits \enquote{maximal}, wenn nicht in größerem Kontext betrachtet
+        \item[{\color[HTML]{ffba75} Could not compute}]Sind z.T. abhängig von Parametern, d.h. Auflösung schwierig
+        \item[{\color[HTML]{ff9933} Call instruction}]Vermutlich auch zukünftig keine Garantien von Seiteneffektfreiheit
+        \item[{\color[HTML]{0087b0} Non affine loop bound}]Oft nicht-Affinität zwingend\\
             Ansätze für nicht-Affinität vorhanden, aber noch nicht vielversprechend
-        \item[Polly returned no reason]Schwierig irgendwelche Aussagen zu treffen
+        \item[{\color[HTML]{8ae3ff} Polly returned no reason}]Schwierig irgendwelche Aussagen zu treffen
     \end{description}\pause
     \(\Rightarrow\) \textbf{Bereits 87\% überdeckt}
 \end{frame}
 \subsection{Theoretischer Speedup}
-\begin{frame}{\subsecname: Amdahl's Law}
-    Sei \(N\in\mathbb{N}\) die Anzahl der Prozessoren und \(DynCov\in\mathbb{Q}\) die Überdeckung der SCoPs eines Projektes. Dann gilt für den theoretischen Speedup \(S\in\mathbb{Q}\):
-    \Huge{\[S := \frac{N}{(1-DynCov)*N+DynCov}\]}
-\end{frame}
 \begin{frame}{\subsecname: Auswertung}
     Sei \(N=8\).
     \begin{itemize}[<+(1)->]
@@ -272,7 +254,7 @@
 \begin{frame}[plain]
     \begin{center}
         \Huge{Welche Fragen beschäftigen Sie noch?}\\
-        \Large{Sie haben \em{jetzt} Gelgenheit.}
+        \Large{Sie haben \textit{jetzt} Gelgenheit.}
     \end{center}
 \end{frame}
 
