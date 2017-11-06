@@ -110,34 +110,32 @@
 
 \section{Hintergrund}
 \subsection{LLVM}
-\begin{frame}[plain]
-    \begin{quotation}\noindent
-        \enquote{
-            Hi Jianzhou,
+{
+    \setbeamertemplate{headline}{}
+    \begin{frame}
+        \vspace*{-1.5cm}
+        \begin{quotation}\noindent
+            \enquote{
+                Hi Jianzhou,
 
-            \enquote{LLVM} is officially no longer an acronym. The acronym it once expanded too was confusing, and inappropriate almost from day 1. :) As LLVM has grown to encompass other subprojects, it became even less useful and meaningless.
+                \enquote{LLVM} is officially no longer an acronym. The acronym it once expanded too was confusing, and inappropriate almost from day 1. :) As LLVM has grown to encompass other subprojects, it became even less useful and meaningless.
 
-            In short, it is just \enquote{The LLVM Project}, and LLVM doesn't stand for anything anymore. It is a nice short domain name though :)
+                In short, it is just \enquote{The LLVM Project}, and LLVM doesn't stand for anything anymore. It is a nice short domain name though :)
 
-            -Chris
-        }\cite{TheNameOfLLVM}\\
-        \small{(Chris Lattner is the original author of LLVM\footnote{http://nondot.org/sabre/}.)}
-    \end{quotation}
-\end{frame}
-\begin{frame}[plain]
-    \resizebox{9.8cm}{!}{
-        \begin{minipage}{\textwidth}
-            \begin{columns}
-                \begin{column}{10cm}
-                    \inputminted{c++}{cpp/matmul.cpp}
-                \end{column}
-                \begin{column}{1cm}
-                    \Huge{Matmul.cpp}
-                \end{column}
-            \end{columns}
-        \end{minipage}
-    }
-\end{frame}
+                -Chris
+            }\cite{TheNameOfLLVM}\\
+            \small{(Chris Lattner is the original author of LLVM\footnote{http://nondot.org/sabre/}.)}
+        \end{quotation}
+    \end{frame}
+    \begin{frame}
+        \vspace*{-1.5cm}
+        \resizebox{9.8cm}{!}{
+            \begin{minipage}{\textwidth}
+                \inputminted{c++}{cpp/matmul.cpp}
+            \end{minipage}
+        }
+    \end{frame}
+}
 \begin{frame}{Pipeline}
     \begin{figure}[!ht]
         \centering
