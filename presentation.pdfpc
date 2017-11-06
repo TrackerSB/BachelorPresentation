@@ -4,6 +4,24 @@ presentation.pdf
 22341
 [notes]
 ### 5
-### 7
-### 9
-CFG Bild zeigen
+### 6
+Compiler framework, static/dynamic, analysis, transformation
+Forschungsprojekt 2004 University of Illinois
+LLVM Foundation seit 2014 (Verwaltung, Beherbergung)
+Zahlreiche Unterprojekte
+
+LLVM-IR:
+Unabhängigkeit von Programmiersprache### 7
+### 8
+Analysen und Optimierungen in Passes
+Linktime optimizations### 9
+### 11
+Polly = Polyhedral + LLVM
+Schleifenoptimierungen
+Graphite GCC
+PCP Polyhedral compilation package
+GIMPLE = GCC + Simple II### 21
+Kein optimierbarer Parent
+toplevel UNoptimierbar### 24
+Detail: PAPI### 25
+lnt = LLVM Nightly Testsuite
