@@ -15,6 +15,7 @@
 \usepackage{minted}
 \usepackage{pstricks}
 \usepackage{transparent}
+\usepackage{smartdiagram}
 
 %minted configure
 \setminted{
@@ -188,39 +189,41 @@
 \begin{frame}{SCoPtree von Matmul.cpp}
     \href{run:./gfx/matmulScops.png}{SCoPtree von Matmul.cpp}
 \end{frame}
-{
-    \setbeamertemplate{headline}{}
-    \begin{frame}
-        \vspace*{-1.5cm}
-        \centering
-        \includegraphics[height=1.2\textheight]{gfx/matmulScops(1).png}
-    \end{frame}
-    \begin{frame}
-        \vspace*{-1.5cm}
-        \centering
-        \includegraphics[height=1.2\textheight]{gfx/matmulScops(2).png}
-    \end{frame}
-    \begin{frame}
-        \vspace*{-1.5cm}
-        \centering
-        \includegraphics[height=1.2\textheight]{gfx/matmulScops(3).png}
-    \end{frame}
-    \begin{frame}
-        \vspace*{-1.5cm}
-        \centering
-        \includegraphics[height=1.2\textheight]{gfx/matmulScops(4).png}
-    \end{frame}
-    \begin{frame}
-        \vspace*{-1.5cm}
-        \centering
-        \includegraphics[height=1.2\textheight]{gfx/matmulScops(5).png}
-    \end{frame}
-    \begin{frame}
-        \vspace*{-1.5cm}
-        \centering
-        \includegraphics[height=1.2\textheight]{gfx/matmulScops(6).png}
-    \end{frame}
-}
+\begin{comment}
+    {
+        \setbeamertemplate{headline}{}
+        \begin{frame}
+            \vspace*{-1.5cm}
+            \centering
+            \includegraphics[height=1.2\textheight]{gfx/matmulScops(1).png}
+        \end{frame}
+        \begin{frame}
+            \vspace*{-1.5cm}
+            \centering
+            \includegraphics[height=1.2\textheight]{gfx/matmulScops(2).png}
+        \end{frame}
+        \begin{frame}
+            \vspace*{-1.5cm}
+            \centering
+            \includegraphics[height=1.2\textheight]{gfx/matmulScops(3).png}
+        \end{frame}
+        \begin{frame}
+            \vspace*{-1.5cm}
+            \centering
+            \includegraphics[height=1.2\textheight]{gfx/matmulScops(4).png}
+        \end{frame}
+        \begin{frame}
+            \vspace*{-1.5cm}
+            \centering
+            \includegraphics[height=1.2\textheight]{gfx/matmulScops(5).png}
+        \end{frame}
+        \begin{frame}
+            \vspace*{-1.5cm}
+            \centering
+            \includegraphics[height=1.2\textheight]{gfx/matmulScops(6).png}
+        \end{frame}
+    }
+\end{comment}
 \begin{comment}
     \begin{frame}{SCoPDetection}
         \begin{enumerate}
@@ -238,6 +241,14 @@
         \end{enumerate}
     \end{frame}
 \end{comment}
+\begin{frame}{SCoPDetection}
+    \smartdiagramset{back arrow disabled=true, module minimum width=3cm, text width=3cm}
+    \smartdiagram[sequence diagram]{
+        Suche nach Kandidaten (top-down),
+        Prüfung auf SCoP-Eigenschaften,
+        Erweiterung des SCoPs (bottom-up)
+    }
+\end{frame}
 
 \section{Empirische Studie}
 {
@@ -247,7 +258,7 @@
             \begin{column}{.33\textwidth}
                 \centering
                 \textbf{SCoPs}\\
-                Wie zuvor definiert
+                Nach Compilerbau-Definition
             \end{column}\pause
             \begin{column}{.33\textwidth}
                 \centering
