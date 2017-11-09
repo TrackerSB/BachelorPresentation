@@ -12,16 +12,55 @@ Zahlreiche Unterprojekte
 
 LLVM-IR:
 Unabhängigkeit von Programmiersprache### 7
-### 8
-Analysen und Optimierungen in Passes
-Linktime optimizations### 9
-### 11
+Hier: clang
+Andere: llvmruby, pypi
+
+Analyse und Transformations passes
+Eigene Passes
+
+Linktime optimizations
+
+Hier: Instrumentierung### 8
+In die pipeline werfen### 9
+Basic block:
+“\[...\] are maximal sequences of consecutive three-address
+instructions with the properties that
+(a) The flow of control can only enter the basic block
+through the first instruction in the block.
+(b) Control will leave the block without halting or branch-
+ing, except possibly at the last instruction in the block.“### 10
+Regions:
+“Formally, a region of a flow graph is a collection of nodes
+N and edges E such that:
+1. There is a header h in N that dominates all the nodes
+in N.
+2. If some node m can reach a node n in N without
+going through h, then m is also in N.
+3. E is the set of all the control flow edges between
+nodes n1 and n2 in N, except (possibly) for some
+that enter h.“ (Drachenbuch)### 11
 Polly = Polyhedral + LLVM
 Schleifenoptimierungen
 Graphite GCC
 PCP Polyhedral compilation package
-GIMPLE = GCC + Simple II### 21
+GIMPLE = GCC + Simple II
+
+SCoP:
+Single Entry + Single Exit
+Lineare Grenzen
+
+Toplevel regions KEINE SCoPs!### 12
+### 15
+Wieso MaxRegions?
+Wenn Erweiterung möglich wäre.### 16
+Subscript s und p### 18
+Auftrennung LLVM eigene Fkt### 19
+Verteilung der Überdeckungen der betrachteten Projekte
+
+4-Teilung### 21
 Kein optimierbarer Parent
-toplevel UNoptimierbar### 24
+toplevel UNoptimierbar
+
+MaxRegions = SCoPs### 24
 Detail: PAPI### 25
 lnt = LLVM Nightly Testsuite

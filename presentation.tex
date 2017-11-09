@@ -128,14 +128,6 @@
             \small{(Chris Lattner is the original author of LLVM\footnote{http://nondot.org/sabre/}.)}
         \end{quotation}
     \end{frame}
-    \begin{frame}
-        \vspace*{-1.5cm}
-        \resizebox{9.8cm}{!}{
-            \begin{minipage}{\textwidth}
-                \inputminted{c++}{cpp/matmul.cpp}
-            \end{minipage}
-        }
-    \end{frame}
 }
 \begin{frame}{Pipeline}
     \begin{figure}[!ht]
@@ -161,6 +153,17 @@
     \centering
     \tiny{Grüne Pfeile/Knoten verwenden LLVM-IR}
 \end{frame}
+{
+    \setbeamertemplate{headline}{}
+    \begin{frame}
+        \vspace*{-1.5cm}
+        \resizebox{9.8cm}{!}{
+            \begin{minipage}{\textwidth}
+                \inputminted{c++}{cpp/matmul.cpp}
+            \end{minipage}
+        }
+    \end{frame}
+}
 \begin{frame}{CFG von Matmul.cpp}
     \href{run:./gfx/matmulCfg.png}{CFG von Matmul.cpp}
 \end{frame}
@@ -276,11 +279,11 @@
 }
 \subsection{Experiment Variablen}
 \begin{frame}{\subsecname: DynCov}
-    Sei \(T_i\in\mathbb{N}\) die Ausführungszeit der SCoPs bzw. Parents eines Projektes und \(T\in\mathbb{N}\) die Ausführungszeit des gesammten Projektes. Dann gilt für die Überdeckung \(DynCov\in\mathbb{Q}\):
+    Sei \(T_i\in\mathbb{N}\) die Ausführungszeit der SCoPs bzw. MaxRegions eines Projektes und \(T\in\mathbb{N}\) die Ausführungszeit des gesammten Projektes. Dann gilt für die Überdeckung \(DynCov\in\mathbb{Q}\):
     \Huge{\[DynCov := \frac{T_i}{T}\]}
 \end{frame}
 \begin{frame}{\subsecname: Amdahl's Law}
-    Sei \(N\in\mathbb{N}\) die Anzahl der Prozessoren und \(DynCov\in\mathbb{Q}\) die Überdeckung der SCoPs bzw. Parents eines Projektes. Dann gilt für den theoretischen Speedup \(S\in\mathbb{Q}\):
+    Sei \(N\in\mathbb{N}\) die Anzahl der Prozessoren und \(DynCov\in\mathbb{Q}\) die Überdeckung der SCoPs bzw. MaxRegions eines Projektes. Dann gilt für den theoretischen Speedup \(S\in\mathbb{Q}\):
     \Huge{\[S := \frac{N}{(1-DynCov)*N+DynCov}\]}
 \end{frame}
 \subsection{Beispiel Instrumentierung}
